@@ -20,6 +20,10 @@
 /**********************************************************************
     Notes:
 
+    What is new for 3.0.7
+
+      1. Added cli_capableNumSpatialStreams field to wifi_associated_dev3_t structure in wifi_hal_generic.h file.
+
     What is new for 3.0.6
 
       1. Added new security types wifi_security_key_type_saeext, wifi_security_key_type_sae_saeext
@@ -192,7 +196,7 @@ extern "C"{
 // Defines for HAL version 3.0.6
 #define WIFI_HAL_MAJOR_VERSION 3        /**< Wi-Fi HAL major version. */
 #define WIFI_HAL_MINOR_VERSION 0        /**< Wi-Fi HAL minor version. */
-#define WIFI_HAL_MAINTENANCE_VERSION 6  /**< Wi-Fi HAL maintenance version. */
+#define WIFI_HAL_MAINTENANCE_VERSION 7  /**< Wi-Fi HAL maintenance version. */
 
 #define WIFI_HAL_VERSION \
     (WIFI_HAL_MAJOR_VERSION * 1000 + WIFI_HAL_MINOR_VERSION * 10 + WIFI_HAL_MAINTENANCE_VERSION) /**< Wi-Fi HAL version. */
@@ -234,6 +238,21 @@ extern "C"{
  * @brief Default length of device information fields.
  */
 #define DEFAULT_DEVICE_FIELD_LEN 64
+
+/**
+ * @brief Constants denoting limits and sentinel values for MLO parameters.
+ */
+
+/* Guarded due to hostapd having same definition */
+#ifndef MAX_NUM_MLD_LINKS
+#define MAX_NUM_MLD_LINKS 15 /**< Maximal allowed number of links */
+#endif
+
+#define MIN_MLO_GROUP_SIZE 2 /**< Minimum number of members that constitute a fully functional MLD. */
+#define MLD_UNIT_COUNT 8 /**< Maximal allowed number of MLDs on the device. */
+#define UNDEFINED_MLD_ID 255 /**< Value to denote unassigned or missing MLD ID */
+#define UNDEFINED_MLD_LINK_ID 255 /**< Value to denote unassigned or missing MLD link ID */
+
 /**********************************************************************
                 STRUCTURE DEFINITIONS
 **********************************************************************/
@@ -1284,7 +1303,8 @@ typedef struct _wifi_associated_dev3
     BOOL cli_TIDLinkMapNegotiation; /* Indicates whether TID to Link MAP negotiation is supported by client */
     mac_address_t cli_MLDAddr; /* Indicates the MLD MAC address of the connected client, 00's for non-Wi-Fi 7 clients. */
     BOOL cli_PowerSaveMode;  /* Indicates the station is in Power save mode or not. */
-    UINT cli_sleepTime;  /* Indicates the station's sleep time. */
+    ULONG cli_sleepTime;  /* Indicates the station's sleep time. */
+    UINT cli_capableNumSpatialStreams; /**< The maximum number of spatial streams supported/capable by the client device in the session. */
 } wifi_associated_dev3_t;
 
 /** @} */  //END OF GROUP WIFI_HAL_TYPES
